@@ -1,0 +1,663 @@
+/* ===== 北海道雪季氛圍版 ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #e3f2fd 0%, #f0f8ff 50%, #e8f5ff 100%);
+  background-attachment: fixed;
+  color: #0d47a1;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 細雪飄落背景動畫 */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, #e3f2fd, transparent),
+    radial-gradient(2px 2px at 40px 70px, #bbdefb, transparent),
+    radial-gradient(1px 1px at 90px 40px, #90caf9, transparent),
+    radial-gradient(1px 1px at 130px 80px, #e3f2fd, transparent);
+  background-repeat: repeat;
+  background-size: 200px 100px;
+  animation: snowDrift 20s linear infinite;
+}
+
+@keyframes snowDrift {
+  to {
+    background-position: 200px 100px;
+  }
+}
+
+/* 主容器：雪地紙張質感 */
+.app-shell {
+  max-width: 1200px;
+  margin: 32px auto;
+  padding: 24px 32px 120px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  box-shadow: 
+    0 32px 80px rgba(13, 71, 161, 0.15),
+    0 8px 32px rgba(255, 255, 255, 0.9) inset,
+    0 -4px 16px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  position: relative;
+}
+
+/* 頁首：冰晶標題 */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 2px solid rgba(52, 152, 219, 0.3);
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.app-header::after {
+  content: '❄';
+  position: absolute;
+  right: 0;
+  top: -8px;
+  font-size: 24px;
+  opacity: 0.6;
+}
+
+.app-header h1 {
+  font-size: 28px;
+  background: linear-gradient(135deg, #0d47a1, #1976d2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.08em;
+  text-shadow: 0 2px 4px rgba(13, 71, 161, 0.2);
+}
+
+.subtitle {
+  font-size: 14px;
+  background: linear-gradient(135deg, #4fc3f7, #81d4fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* 主要版面 */
+.app-main {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 24px;
+}
+
+/* 左側：雪花卡片列表 */
+.day-list {
+  border-right: 2px solid rgba(52, 152, 219, 0.2);
+  padding-right: 16px;
+  max-height: 680px;
+  overflow-y: auto;
+  padding-top: 8px;
+}
+
+.day-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.day-list::-webkit-scrollbar-track {
+  background: rgba(236, 245, 255, 0.8);
+  border-radius: 10px;
+}
+
+.day-list::-webkit-scrollbar-thumb {
+  background: linear-gradient(#bbdefb, #90caf9);
+  border-radius: 10px;
+}
+
+/* 每日卡片：冰塊質感 */
+.day-card {
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  background: linear-gradient(145deg, #ffffff, #f8fbff);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 
+    0 8px 24px rgba(13, 71, 161, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+}
+
+.day-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(52, 152, 219, 0.6), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.day-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 
+    0 20px 40px rgba(13, 71, 161, 0.2),
+    0 8px 24px rgba(52, 152, 219, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+  border-color: rgba(52, 152, 219, 0.4);
+}
+
+.day-card:hover::before {
+  opacity: 1;
+}
+
+.day-card.selected {
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+  border-color: #1976d2;
+  box-shadow: 
+    0 12px 32px rgba(25, 118, 210, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.day-card-topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #4fc3f7;
+  font-weight: 500;
+}
+
+.day-card-date {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.day-card-city {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0d47a1;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.day-card-summary {
+  font-size: 13px;
+  color: #1565c0;
+  line-height: 1.4;
+}
+
+/* 右側詳情：雪地筆記本 */
+.day-detail {
+  padding-left: 12px;
+  max-height: 680px;
+  overflow-y: auto;
+}
+
+.day-detail::-webkit-scrollbar {
+  width: 6px;
+}
+
+.day-detail::-webkit-scrollbar-track {
+  background: rgba(236, 245, 255, 0.8);
+}
+
+.day-detail::-webkit-scrollbar-thumb {
+  background: linear-gradient(#bbdefb, #90caf9);
+}
+
+/* 詳情標題 */
+.day-detail-header {
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgba(52, 152, 219, 0.2);
+}
+
+.day-detail-title {
+  font-size: 22px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #0d47a1, #1976d2, #42a5f5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.day-detail-meta {
+  font-size: 14px;
+  color: #4fc3f7;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+/* 時間段：冰晶卡片 */
+.section-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.section-card {
+  border-radius: 16px;
+  padding: 16px;
+  background: linear-gradient(145deg, #f8fbff, #ffffff);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 
+    0 6px 20px rgba(13, 71, 161, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+  transition: all 0.2s ease;
+}
+
+.section-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 28px rgba(13, 71, 161, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.section-topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.section-time {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1976d2;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.section-type {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.section-type.transport {
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+  color: #0d47a1;
+}
+
+.section-type.meal {
+  background: linear-gradient(135deg, #fff3cd, #ffecb3);
+  color: #856404;
+}
+
+.section-type.sightseeing {
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  color: #2e7d32;
+}
+
+.section-type.free {
+  background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+  color: #6a1b9a;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0d47a1;
+  margin-bottom: 4px;
+}
+
+.section-description {
+  font-size: 13px;
+  color: #1565c0;
+  line-height: 1.5;
+}
+
+.section-notes {
+  font-size: 12px;
+  color: #4fc3f7;
+  margin-top: 6px;
+  font-style: italic;
+  padding: 6px 10px;
+  background: rgba(79, 195, 247, 0.1);
+  border-radius: 8px;
+  border-left: 3px solid #4fc3f7;
+}
+
+/* Highlights：雪花清單 */
+.highlights {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 2px solid rgba(52, 152, 219, 0.2);
+}
+
+.highlights-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0d47a1;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.highlights ul {
+  padding-left: 20px;
+}
+
+.highlights li {
+  font-size: 13px;
+  color: #1565c0;
+  margin-bottom: 4px;
+  position: relative;
+}
+
+.highlights li::before {
+  content: '❄';
+  position: absolute;
+  left: -20px;
+  color: #bbdefb;
+}
+
+/* RWD */
+@media (max-width: 768px) {
+  .app-main {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .day-list {
+    border-right: none;
+    border-bottom: 2px solid rgba(52, 152, 219, 0.2);
+    padding-right: 0;
+    padding-bottom: 16px;
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+  }
+  .day-card {
+    min-width: 200px;
+    flex-shrink: 0;
+  }
+  .day-detail {
+    padding-left: 0;
+    padding-top: 16px;
+  }
+  .app-shell {
+    margin: 16px 12px;
+    padding: 20px 24px;
+  }
+}
+/* ===== 花費記帳區樣式 ===== */
+
+.expense-panel {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 2px solid rgba(52, 152, 219, 0.25);
+}
+
+.expense-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #0d47a1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.expense-title::before {
+  content: "¥";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #1976d2, #42a5f5);
+  color: #fff;
+  font-size: 12px;
+  box-shadow: 0 2px 6px rgba(13, 71, 161, 0.4);
+}
+
+/* 表單區塊 */
+.expense-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px 18px;
+  align-items: flex-end;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f7f9ff, #ffffff);
+  border: 1px solid rgba(197, 214, 242, 0.8);
+}
+
+.expense-form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.expense-form-row label {
+  color: #1565c0;
+  font-weight: 600;
+}
+
+.expense-form-row input,
+.expense-form-row select {
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #c5d6f2;
+  font-size: 13px;
+  background: #fdfefe;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.expense-form-row input:focus,
+.expense-form-row select:focus {
+  outline: none;
+  border-color: #1976d2;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+}
+
+.expense-add-btn {
+  align-self: flex-end;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #1976d2, #42a5f5);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(25, 118, 210, 0.35);
+  white-space: nowrap;
+}
+
+.expense-add-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* 小計與總計 */
+.expense-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 13px;
+  margin-bottom: 10px;
+  color: #0d47a1;
+}
+
+.expense-summary span {
+  font-weight: 700;
+}
+
+/* 明細表格 */
+.expense-list-wrapper {
+  margin-top: 4px;
+}
+
+.expense-list-wrapper h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1565c0;
+  margin-bottom: 6px;
+}
+
+.expense-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(15, 35, 60, 0.08);
+}
+
+.expense-table th,
+.expense-table td {
+  border-bottom: 1px solid #e1e6f2;
+  padding: 6px 8px;
+}
+
+.expense-table th {
+  text-align: left;
+  background: #eef4ff;
+  color: #1565c0;
+  font-weight: 600;
+}
+
+.expense-table tr:last-child td {
+  border-bottom: none;
+}
+
+.expense-table tbody tr:nth-child(even) {
+  background: #f8fbff;
+}
+/* 🚀 新增：底部固定匯出按鈕 */
+.app-footer {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  left: 20px;
+  z-index: 1000;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.export-btn {
+  width: 100%;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #4caf50, #81c784);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 
+    0 12px 32px rgba(76, 175, 80, 0.4),
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.export-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s;
+}
+
+.export-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 
+    0 20px 48px rgba(76, 175, 80, 0.5),
+    0 8px 24px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  background: linear-gradient(135deg, #45a049, #75ba7a);
+}
+
+.export-btn:hover::before {
+  left: 100%;
+}
+
+.export-btn:active {
+  transform: translateY(-1px);
+}
+
+.import-btn {
+  width: 100%;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #ff9800, #ffb74d);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 
+    0 12px 32px rgba(255, 152, 0, 0.4),
+    0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin-top: 12px;
+}
+
+.import-btn:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(135deg, #f57c00, #ff8f00);
+  box-shadow: 
+    0 20px 48px rgba(255, 152, 0, 0.5),
+    0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+
+@media (max-width: 768px) {
+  .app-footer {
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+  }
+  .export-btn {
+    padding: 14px 20px;
+    font-size: 16px;
+    border-radius: 40px;
+  }
+}
+
