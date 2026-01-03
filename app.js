@@ -237,421 +237,8 @@ const itinerary = {
       ]
     },
 
-    // Day 3: 札幌小樽一日遊
-    {
-      dayNumber: 3,
-      date: "2026-02-12",
-      weekday: "Thu",
-      city: "Sapporo・Otaru",
-      summary: "小樽運河・玻璃工房・LeTAO甜點",
-      themeIcon: "canal_snow",
-      sections: [
-        {
-          timeRange: "08:30 - 09:30",
-          type: "transport",
-          title: "從札幌出發前往小樽",
-          description: "JR快速列車約30-40分鐘抵達小樽站。",
-          notes: "建議購買JR北海道周遊券"
-        },
-        {
-          timeRange: "10:00 - 12:00",
-          type: "sightseeing",
-          title: "小樽運河 & 北一硝子散策",
-          description: "冬季運河雪景拍照，參觀玻璃工藝店與音樂盒博物館。",
-          notes: "運河邊咖啡廳適合休息"
-        },
-        {
-          timeRange: "12:00 - 13:30",
-          type: "meal",
-          title: "小樽壽司午餐",
-          description: "新鮮壽司套餐，體驗北海道海鮮文化。",
-          notes: ""
-        },
-        {
-          timeRange: "14:00 - 16:00",
-          type: "sightseeing",
-          title: "堺町通 & LeTAO甜點",
-          description: "老街購物，LeTAO乳酪蛋糕必買伴手禮。",
-          notes: "排隊時間約30-60分鐘"
-        },
-        {
-          timeRange: "16:30 - 17:30",
-          type: "transport",
-          title: "返回札幌",
-          description: "傍晚JR返回札幌，準備晚餐。",
-          notes: ""
-        }
-      ],
-      highlights: [
-        "小樽運河冬季浪漫雪景",
-        "玻璃工藝與音樂盒體驗",
-        "LeTAO北海道限定甜點",
-        "老街購物伴手禮"
-      ]
-    },
-
-    // Day 4: 札幌自由日・白色戀人公園
-    {
-      dayNumber: 4,
-      date: "2026-02-13",
-      weekday: "Fri",
-      city: "Sapporo",
-      summary: "白色戀人公園・狸小路購物",
-      themeIcon: "chocolate",
-      sections: [
-        {
-          timeRange: "09:00 - 12:00",
-          type: "sightseeing",
-          title: "白色戀人公園",
-          description: "參觀巧克力工廠，冬季限定雪景甜點。",
-          notes: "市電約30分鐘可達"
-        },
-        {
-          timeRange: "13:00 - 17:00",
-          type: "shopping",
-          title: "狸小路商店街・札幌站購物",
-          description: "保暖用品、北海道限定伴手禮。",
-          notes: "注意店舖營業時間"
-        },
-        {
-          timeRange: "18:00 - 20:00",
-          type: "meal",
-          title: "札幌啤酒園・成吉思汗",
-          description: "經典北海道烤羊肉體驗。",
-          notes: ""
-        }
-      ],
-      highlights: [
-        "白色戀人巧克力工廠",
-        "狸小路冬季購物",
-        "札幌啤酒園烤肉",
-        "伴手禮採購完成"
-      ]
-    },
-
-    // Day 5: 定山溪溫泉
-    {
-      dayNumber: 5,
-      date: "2026-02-14",
-      weekday: "Sat",
-      city: "Jozankei",
-      summary: "定山溪萬世閣・雪見溫泉",
-      themeIcon: "onsen",
-      sections: [
-        {
-          timeRange: "09:00 - 11:00",
-          type: "transport",
-          title: "札幌 → 定山溪萬世閣飯店",
-          description: "巴士約1小時抵達定山溪溫泉區。",
-          notes: "提前預約接駁車"
-        },
-        {
-          timeRange: "12:00 - 21:00",
-          type: "relax",
-          title: "萬世閣露天溫泉・雪見風呂",
-          description: "大正時代老爺飯店，冬季限定雪景露天溫泉。",
-          notes: "情人節限定晚餐套餐"
-        },
-        {
-          timeRange: "19:00 - 21:00",
-          type: "meal",
-          title: "萬世閣懷石料理",
-          description: "北海道當季食材懷石料理。",
-          notes: "住宿：萬世閣飯店"
-        }
-      ],
-      highlights: [
-        "大正時代老爺溫泉飯店",
-        "雪見露天溫泉體驗",
-        "情人節懷石料理",
-        "完全放鬆療癒日"
-      ]
-    },
-
-    // Day 6-10 簡化版
-    {
-      dayNumber: 6,
-      date: "2026-02-15",
-      weekday: "Sun",
-      city: "Asahikawa",
-      summary: "移動旭川・拉麵小路",
-      themeIcon: "ramen",
-      sections: [
-        {
-          timeRange: "09:00-12:00",
-          type: "transport",
-          title: "札幌→旭川",
-          description: "JR特急約1.5小時",
-          notes: ""
-        },
-        {
-          timeRange: "13:00-15:00",
-          type: "meal",
-          title: "旭川拉麵小路",
-          description: "品嚐旭川醬油拉麵",
-          notes: ""
-        },
-        {
-          timeRange: "16:00-18:00",
-          type: "sightseeing",
-          title: "旭川市區散策",
-          description: "雪景街道拍照",
-          notes: "住宿：旭川市區"
-        }
-      ],
-      highlights: ["旭川拉麵", "市區適應"]
-    },
-    {
-      dayNumber: 7,
-      date: "2026-02-16",
-      weekday: "Mon",
-      city: "Asahikawa→Sounkyo",
-      summary: "旭山動物園・層雲峽夜宿",
-      themeIcon: "zoo",
-      sections: [
-        {
-          timeRange: "09:00-13:00",
-          type: "sightseeing",
-          title: "旭山動物園",
-          description: "企鵝散步・北極熊",
-          notes: ""
-        },
-        {
-          timeRange: "14:00-17:00",
-          type: "transport",
-          title: "旭川→層雲峽",
-          description: "巴士約2小時",
-          notes: ""
-        },
-        {
-          timeRange: "18:00-20:00",
-          type: "meal",
-          title: "層雲峽溫泉晚餐",
-          description: "住宿：層雲峽溫泉",
-          notes: ""
-        }
-      ],
-      highlights: ["世界第一動物園", "層雲峽峽谷"]
-    },
-    {
-      dayNumber: 8,
-      date: "2026-02-17",
-      weekday: "Tue",
-      city: "Sounkyo→Asahikawa",
-      summary: "冰瀑祭・返回旭川",
-      themeIcon: "ice_waterfall",
-      sections: [
-        {
-          timeRange: "09:00-15:00",
-          type: "sightseeing",
-          title: "層雲峽冰瀑祭",
-          description: "光雕冰柱・峽谷步道",
-          notes: ""
-        },
-        {
-          timeRange: "16:00-18:00",
-          type: "transport",
-          title: "返回旭川",
-          description: "巴士約2小時",
-          notes: ""
-        }
-      ],
-      highlights: ["冰瀑祭光雕", "峽谷健行"]
-    },
-    {
-      dayNumber: 9,
-      date: "2026-02-18",
-      weekday: "Wed",
-      city: "Asahikawa",
-      summary: "雪上活動・自由行",
-      themeIcon: "snow_play",
-      sections: [
-        {
-          timeRange: "09:00-16:00",
-          type: "sightseeing",
-          title: "旭川雪地活動",
-          description: "雪橇・雪地摩托車",
-          notes: ""
-        },
-        {
-          timeRange: "17:00-20:00",
-          type: "meal",
-          title: "旭川燒烤晚餐",
-          description: "當地燒肉體驗",
-          notes: ""
-        }
-      ],
-      highlights: ["冬季雪上樂趣", "燒肉大餐"]
-    },
-    {
-      dayNumber: 10,
-      date: "2026-02-19",
-      weekday: "Thu",
-      city: "Asahikawa→Sapporo",
-      summary: "返回札幌・狸小路",
-      themeIcon: "shopping",
-      sections: [
-        {
-          timeRange: "09:00-11:00",
-          type: "transport",
-          title: "旭川→札幌",
-          description: "JR特急約1.5小時",
-          notes: ""
-        },
-        {
-          timeRange: "12:00-18:00",
-          type: "shopping",
-          title: "狸小路最終購物",
-          description: "北海道限定商品",
-          notes: ""
-        }
-      ],
-      highlights: ["最終購物", "札幌回歸"]
-    },
-
-    // Day 11: 札幌諏訪神社・羊ヶ丘・啤酒園
-    {
-      dayNumber: 11,
-      date: "2026-02-20",
-      weekday: "Fri",
-      city: "Sapporo 東区・豊平区・中央区",
-      summary: "札幌諏訪神社・羊ヶ丘展望台・サッポロガーデンパーク",
-      themeIcon: "shrine_snow",
-      sections: [
-        {
-          timeRange: "09:00 - 10:30",
-          type: "sightseeing",
-          title: "札幌諏訪神社 參拜・御朱印",
-          description:
-            '前往 <a href="https://www.sapporo-suwajinja.com/" target="_blank">札幌諏訪神社</a> 參拜，領取月替わり御朱印，感受花手水與境內氛圍。',
-          notes:
-            '御朱印資訊：<a href="https://hotokami.jp/area/hokkaido/Htktk/Htktmtm/Drkrr/120686/" target="_blank">ホトカミ・札幌諏訪神社御朱印</a>'
-        },
-        {
-          timeRange: "11:00 - 15:00",
-          type: "sightseeing",
-          title: "さっぽろ羊ヶ丘展望台・雪まつり資料館・スノーパーク",
-          description:
-            '移動至 <a href="https://www.hitsujigaoka.jp/" target="_blank">さっぽろ羊ヶ丘展望台</a>，拍照經典 <a href="https://www.hitsujigaoka.jp/clark/" target="_blank">クラーク博士像</a> 與 <a href="https://www.hitsujigaoka.jp/facility/clark_memorial_hall/?lang=ja#googtrans(ja|ja)" target="_blank">記念館</a>，參觀 <a href="https://www.snowfes.com/sapporo-snow-festival-museum/" target="_blank">さっぽろ雪まつり資料館</a>、<a href="https://www.hitsujigaoka.jp/facility/austrian_style_house/?lang=ja#googtrans(ja|ja)" target="_blank">オーストリア館</a>，並在 <a href="https://www.hitsujigaoka.jp/snowpark/" target="_blank">羊ヶ丘スノーパーク2026</a> 體驗雪上活動。',
-          notes:
-            "羊ヶ丘展望台 09:00～17:00、スノーパーク 10:00～15:00（依當年實際公告為準）"
-        },
-        {
-          timeRange: "15:00 - 16:00",
-          type: "meal",
-          title: "CiiNA CiiNA (シーナシーナ) 福住",
-          description:
-            '在 <a href="https://ciina-ciina.com/fukuzumi/" target="_blank">CiiNA CiiNA 福住</a> 享用甜點或輕食，作為下午茶休息時間。',
-          notes: "營業時間 10:00～20:00"
-        },
-        {
-          timeRange: "16:30 - 20:30",
-          type: "sightseeing",
-          title: "サッポロガーデンパーク・啤酒博物館・成吉思汗晚餐",
-          description:
-            '前往札幌東區 <b>サッポロガーデンパーク</b>：參觀 <a href="https://www.sapporobeer.jp/brewery/s_museum/" target="_blank">サッポロビール博物館</a>，了解札幌啤酒歷史，晚餐於 <a href="https://sapporo-bier-garten.jp/" target="_blank">サッポロビール園</a> 享用成吉思汗烤羊肉與啤酒。可選擇 <a href="https://tabelog.com/hokkaido/A0101/A010202/1000159/" target="_blank">開拓使館</a> 或 <a href="https://tabelog.com/hokkaido/A0101/A010202/1038859/" target="_blank">ポプラ館</a> 等會場。',
-          notes:
-            '啤酒博物館 11:00～18:00，ビール園一般 17:00～21:00；介紹影片：<a href="https://www.youtube.com/watch?v=2sWJ-uX8q1g&list=PLTK9EV1d7ikBTATicZhja2qguFcuZLTze&index=1" target="_blank">YouTube</a>'
-        },
-        {
-          timeRange: "20:30 - 21:30",
-          type: "shopping",
-          title: "アリオ札幌 (Ario Sapporo) 晚間購物",
-          description:
-            '餐後步行或搭車前往 <a href="https://sapporo.ario.jp/" target="_blank">アリオ札幌</a>，進行最後一輪購物與超市採買。',
-          notes: "營業時間 10:00～21:00，請留意各櫃位打烊時間"
-        },
-        {
-          timeRange: "21:30 - 22:30",
-          type: "transport",
-          title: "返回住宿：ALPHABED INN 札幌大通公園",
-          description:
-            '從アリオ或札幌東區返回中央區住宿 <a href="https://alphabed.airhost.co/ja/houses/206930" target="_blank">ALPHABED INN 札幌大通公園</a>，整理行李、休息。',
-          notes: "確認翌日移動時間與天氣、交通資訊。"
-        }
-      ],
-      highlights: [
-        '札幌東區 <a href="https://www.sapporo-suwajinja.com/" target="_blank">札幌諏訪神社</a> 參拜與月替御朱印',
-        '<a href="https://www.hitsujigaoka.jp/" target="_blank">羊ヶ丘展望台</a> & さっぽろ雪まつり資料館・雪上活動',
-        '<a href="https://www.sapporobeer.jp/brewery/s_museum/" target="_blank">サッポロビール博物館</a> 與成吉思汗烤羊肉晚餐',
-        '<a href="https://sapporo.ario.jp/" target="_blank">アリオ札幌</a> 晚間購物',
-        '<a href="https://alphabed.airhost.co/ja/houses/206930" target="_blank">ALPHABED INN 札幌大通公園</a> 入住'
-      ]
-    },
-
-    // Day 12
-    {
-      dayNumber: 12,
-      date: "2026-02-21",
-      weekday: "Sat",
-      city: "Sapporo",
-      summary: "自由購物・美食日",
-      themeIcon: "food",
-      sections: [
-        {
-          timeRange: "10:00-18:00",
-          type: "shopping",
-          title: "札幌站・大丸自由購物",
-          description: "最後衝刺伴手禮",
-          notes: ""
-        },
-        {
-          timeRange: "19:00-21:00",
-          type: "meal",
-          title: "海鮮丼最終晚餐",
-          description: "新千歲機場附近海鮮",
-          notes: ""
-        }
-      ],
-      highlights: ["北海道海鮮丼", "伴手禮打包"]
-    },
-
-    // Day 13
-    {
-      dayNumber: 13,
-      date: "2026-02-22",
-      weekday: "Sun",
-      city: "Sapporo",
-      summary: "預備返程・最後衝刺",
-      themeIcon: "prepare",
-      sections: [
-        {
-          timeRange: "09:00-15:00",
-          type: "shopping",
-          title: "新千歲機場購物",
-          description: "機場限定伴手禮",
-          notes: ""
-        },
-        {
-          timeRange: "16:00-18:00",
-          type: "transport",
-          title: "飯店→機場",
-          description: "準備酷航返台",
-          notes: ""
-        }
-      ],
-      highlights: ["機場購物", "行程圓滿"]
-    },
-
-    // Day 14
-    {
-      dayNumber: 14,
-      date: "2026-02-23",
-      weekday: "Mon",
-      city: "Sapporo→Taiwan",
-      summary: "酷航返台・行程結束",
-      themeIcon: "airplane",
-      sections: [
-        {
-          timeRange: "全日",
-          type: "transport",
-          title: "Scoot TR893 新千歲→桃園",
-          description: "2026北海道雪季之旅完美結束！",
-          notes: "Safe travels! 安全到家！"
-        }
-      ],
-      highlights: ["完美結束北海道之旅", "滿載回憶返台"]
-    }
+    
+  
   ]
 };
 
@@ -713,7 +300,7 @@ function exportItinerary() {
   console.log(`✅ 匯出完成：${filename}`);
 }
 
-// 🚀 新增：完整行程匯入功能
+// 🚀 新增：完整行程匯入功能（永久儲存版）
 function importItinerary() {
   const input = document.createElement("input");
   input.type = "file";
@@ -734,24 +321,29 @@ function importItinerary() {
           return;
         }
 
-        // 匯入行程
-        itinerary.tripTitle = data.itinerary.tripTitle;
-        itinerary.tripPeriod = data.itinerary.tripPeriod;
-        itinerary.locationsSummary = data.itinerary.locationsSummary;
-        itinerary.days = data.itinerary.days;
+        // 🚀 1. 覆蓋目前記憶體中的行程（保留原有的如果匯入檔沒有的欄位）
+        itinerary.tripTitle = data.itinerary.tripTitle || itinerary.tripTitle;
+        itinerary.tripPeriod = data.itinerary.tripPeriod || itinerary.tripPeriod;
+        itinerary.locationsSummary = data.itinerary.locationsSummary || itinerary.locationsSummary;
+        itinerary.days = data.itinerary.days || itinerary.days;
 
-        // 匯入花費
-        expenses = data.expenses;
+        // 🚀 2. 覆蓋目前記憶體中的花費
+        expenses = Array.isArray(data.expenses) ? data.expenses : [];
         nextExpenseId = expenses.length ? Math.max(...expenses.map(e => e.id || 0)) + 1 : 1;
 
-        // 儲存花費到 localStorage
-        saveExpenses();
-        
+        // 🚀 3. 永久儲存「行程」與「花費」到 localStorage
+        try {
+          localStorage.setItem("hokkaido_itinerary_v1", JSON.stringify(itinerary));
+          localStorage.setItem("hokkaido_expenses", JSON.stringify(expenses));
+        } catch (err) {
+          console.warn("寫入 localStorage 失敗，但匯入已完成", err);
+        }
+
         // 重新渲染
         renderDayList();
         renderDayDetail();
         
-        alert(`✅ 匯入成功！\n行程：${itinerary.days.length} 天\n花費：${expenses.length} 筆`);
+        alert(`✅ 匯入成功！已永久儲存\n行程：${itinerary.days.length} 天\n花費：${expenses.length} 筆\n\n下次開啟會自動載入此版本！`);
         
       } catch (err) {
         console.error(err);
@@ -764,6 +356,7 @@ function importItinerary() {
   
   input.click();
 }
+
 
 
 /// 匯出 CSV 檔（Excel 可直接開）
@@ -1009,6 +602,30 @@ if (importBtn) {
   });
 }
 
+// 🚀 新增：重置為預設行程（帶確認對話框）
+function resetToDefault() {
+  if (confirm("⚠️ 確定要重置為原始預設行程嗎？\n\n這會清除所有匯入的客製化行程與花費記錄！\n\n原始 Day 0-14 行程會重新載入。")) {
+    
+    // 1. 清空 localStorage
+    localStorage.removeItem("hokkaido_itinerary_v1");
+    localStorage.removeItem("hokkaido_expenses");
+    
+    // 2. 重新載入頁面（回到原始 app.js 裡的預設行程）
+    location.reload();
+    
+    console.log("✅ 已重置為預設行程");
+  }
+}
+
+// 🚀 重置按鈕事件監聽
+const resetBtn = document.getElementById("reset-btn");
+if (resetBtn) {
+  resetBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    resetToDefault();
+  });
+}
+
 
 function renderDayDetail() {
   const day = itinerary.days[selectedDayIndex];
@@ -1083,11 +700,6 @@ function renderDayDetail() {
     <!-- 💰 每日花費記帳 -->
     <div class="expense-panel">
       <h3 class="expense-title">💰 每日花費記帳</h3>
-
-  <div class="expense-tools">
-  <button type="button" id="btn-export-expenses">匯出花費 CSV</button>
-  <button type="button" id="btn-import-expenses">匯入花費 CSV</button>
-</div>
 
       <form id="expense-form" class="expense-form">
         <div class="expense-form-row">
@@ -1224,8 +836,9 @@ function renderDayDetail() {
   });
 
   // 刪除 / 編輯按鈕（事件委派）
-  const expenseTableBody = document.getElementById("expense-table-body");
-  if (expenseTableBody) {
+ const expenseTableBody = document.getElementById("expense-table-body");
+if (expenseTableBody)
+ {
     expenseTableBody.addEventListener("click", (evt) => {
       const target = evt.target;
       if (!(target instanceof HTMLElement)) return;
@@ -1273,13 +886,21 @@ function renderDayDetail() {
   }
 
   // 匯出 / 匯入按鈕
-  const btnExport = document.getElementById("btn-export-expenses");
-  const btnImport = document.getElementById("btn-import-expenses");
   if (btnExport) btnExport.addEventListener("click", exportExpenses);
   if (btnImport) btnImport.addEventListener("click", importExpenses);
 }
 
-// 匯出按鈕事件 
+
 // 初始渲染
 renderDayList();
 renderDayDetail();
+
+// 🚀 toolbox 花費按鈕事件（全域） - 新增這整個區塊
+document.addEventListener('DOMContentLoaded', () => {
+  const expensesExportBtn = document.getElementById('expenses-export-btn');
+  const expensesImportBtn = document.getElementById('expenses-import-btn');
+  
+  if (expensesExportBtn) expensesExportBtn.addEventListener('click', exportExpenses);
+  if (expensesImportBtn) expensesImportBtn.addEventListener('click', importExpenses);
+});
+
