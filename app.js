@@ -995,11 +995,16 @@ const typeOptionsHtml = ITINERARY_FIELDS.types
     const timeRange = parseTimeInput(rawTimeInput);
     const type = sectionTypeInput.value;
     const plainTitle = sectionTitleInput.value.trim();
-    const linkUrl = sectionLinkInput.value.trim();
-    const plainNotes = sectionNotesInput.value.trim();
+   
+ // 🚀 修正：宣告 rawLink 變數
+  const rawLink = sectionLinkInput.value.trim();
+  const linkUrl = rawLink ? 
+    (rawLink.match(/^https?:\/\//) ? rawLink : 'https://' + rawLink) : '';
+    
+const plainNotes = sectionNotesInput.value.trim();
 
-    if (!rawTimeInput || !plainTitle || !/^\d{4}$/.test(rawTimeInput)) {
-  alert("❌ 時間格式錯誤！請輸入 4 位數字，如：2100（晚上9點）");
+  if (!rawTimeInput || !plainTitle || !/^\d{4}$/.test(rawTimeInput)) {
+    alert("❌ 時間格式錯誤！請輸入 4 位數字，如：2100");
   return;
 }
 
