@@ -237,11 +237,125 @@ const itinerary = {
       ]
     },
 
-    
-  
+
+
   ]
 };
 
+
+// ==== 🚀 新增：時間格式轉換函數 ====
+function formatTimeDisplay(rawTime) {
+  // 4位數字 2100 → 21:00，舊格式 "08:00" 保持不變
+  if (rawTime && /^\d{4}$/.test(rawTime)) {  // 正確 4 位數字
+    const hour = rawTime.slice(0,2).padStart(2,'0');
+    const min = rawTime.slice(2,4).padStart(2,'0');
+    if (Number(hour) <= 23 && Number(min) <= 59) {
+      return `${hour}:${min}`;
+    }
+  }
+  return rawTime || '';  // 舊資料或無效格式直接顯示
+}
+
+function parseTimeInput(displayTime) {
+  // 顯示 "21:00" → 存 "2100"，4位數字保持不變
+  if (displayTime && /^\d{4}$/.test(displayTime)) {
+    return displayTime;
+  }
+  const match = displayTime.match(/^(\d{1,2}):(\d{2})$/);
+  if (match) {
+    const hour = match[1].padStart(2,'0');
+    const min = match[2];
+    if (Number(hour) <= 23 && Number(min) <= 59) {
+      return hour + min;
+    }
+  }
+  return displayTime;  // 舊資料如 "Anytime" 保持原樣
+}
+
+// 🚀 依時間排序一天行程（Anytime放最後）
+function getSortKeyFromTimeRange(timeRange) {
+  if (!timeRange) return null;
+  const match = String(timeRange).match(/^(\d{4})/);
+  return match ? match[1] : null;
+}
+
+function compareTimeString(t1, t2) {
+  return Number(t1) - Number(t2);
+}
+
+function sortSectionsByTimeForDay(day) {
+  if (!day?.sections) return;
+  day.sections.sort((a, b) => {
+    const keyA = getSortKeyFromTimeRange(a.timeRange);
+    const keyB = getSortKeyFromTimeRange(b.timeRange);
+    if (keyA === null && keyB === null) return 0;
+    if (keyA === null) return 1;
+    if (keyB === null) return -1;
+    return compareTimeString(keyA, keyB);
+  });
+}
+
+
+
+// ==== 🚀 全域欄位設定（繁中顯示） ====
+const ITINERARY_FIELDS = {
+  // value 給程式/CSV用，label 顯示繁中
+  types: [
+   { value: "meal",      label: "餐飲" },
+  { value: "shopping",  label: "購物" },
+  { value: "hotel",     label: "住宿" },
+  { value: "transport", label: "交通" },
+  { value: "sightseeing", label: "景點" },
+  { value: "free",      label: "其他" }
+  ],
+  currencies: ["JPY", "TWD", "USD"],
+  itineraryCsvHeaders: [
+    "dayNumber","date","timeRange","type","title","amount",
+    "currency","linkUrl","notes","description"
+  ],
+  expensesCsvHeaders: [
+    "id","date","timeRange","type","amount","currency","item","linkUrl","notes"
+  ]
+};
+
+
+
+// 🚀 英文 type → 繁中 label
+function displayTypeLabel(type) {
+  const found = ITINERARY_FIELDS.types.find(t => t.value === type);
+  return found ? found.label : (type || "未分類");
+}
+
+
+// ==== 🚀 HTML ↔ 純文字轉換工具（A. 新增） ====
+
+// 純文字 + 連結 → HTML title（自動包 <a> 標籤）
+function buildHtmlTitle(plainTitle, linkUrl) {
+  if (!plainTitle) return "";
+  if (!linkUrl || linkUrl.trim() === "") return plainTitle;
+  return `<a href="${linkUrl.trim()}" target="_blank">${plainTitle}</a>`;
+}
+
+// 純文字 → HTML notes（加圖示前綴）
+function buildHtmlNotes(plainNotes) {
+  if (!plainNotes || plainNotes.trim() === "") return "";
+  return plainNotes.trim();
+}
+
+// HTML → 純文字（反推，去掉所有標籤）
+function extractPlainText(htmlContent) {
+  if (!htmlContent) return "";
+  const tmp = document.createElement("div");
+  tmp.innerHTML = htmlContent;
+  return (tmp.textContent || tmp.innerText || "").trim();
+}
+
+// 從 HTML 中提取第一個連結 URL
+function extractFirstUrl(htmlContent) {
+  if (!htmlContent) return "";
+  const match = htmlContent.match(/href="([^"]+)"/);
+  return match ? match[1] : "";
+}
 
 
 // ==== 花費記帳資料 + localStorage + 編輯/刪除 ====
@@ -259,7 +373,8 @@ try {
   expenses = [];
 }
 
-const expenseCategories = ["食", "衣", "住", "行", "育", "樂"];
+const expenseCategories = ["餐飲", "購物", "住宿", "交通", "景點", "其他"];
+
 
 // 根據已存在資料決定下一個 id
 if (expenses.length > 0) {
@@ -281,13 +396,13 @@ function exportItinerary() {
     itinerary: itinerary,
     expenses: expenses,
     exportDate: new Date().toISOString(),
-    exportVersion: "1.0"
+    exportVersion: "2.0"
   };
 
   const jsonStr = JSON.stringify(exportData, null, 2);
   const blob = new Blob([jsonStr], { type: "application/json;charset=utf-8" });
   const filename = `Hokkaido_Itinerary_${itinerary.tripPeriod.replace(/[~]/g, '_')}.json`;
-  
+
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
@@ -296,16 +411,16 @@ function exportItinerary() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  
+
   console.log(`✅ 匯出完成：${filename}`);
 }
 
-// 🚀 新增：完整行程匯入功能（永久儲存版）
+// 🚀 完整行程匯入功能（永久儲存版）
 function importItinerary() {
   const input = document.createElement("input");
   input.type = "file";
   input.accept = ".json,application/json";
-  
+
   input.addEventListener("change", (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -314,49 +429,62 @@ function importItinerary() {
     reader.onload = (e) => {
       try {
         const data = JSON.parse(e.target.result);
-        
-        // 檢查檔案格式
-        if (!data.itinerary || !data.expenses) {
+
+        // ✅ 修正：只要有 itinerary 或 expenses 就接受
+        if (!data) {
           alert("❌ 檔案格式錯誤！請使用「匯出行程」導出的 JSON 檔案");
           return;
         }
 
-        // 🚀 1. 覆蓋目前記憶體中的行程（保留原有的如果匯入檔沒有的欄位）
-        itinerary.tripTitle = data.itinerary.tripTitle || itinerary.tripTitle;
-        itinerary.tripPeriod = data.itinerary.tripPeriod || itinerary.tripPeriod;
-        itinerary.locationsSummary = data.itinerary.locationsSummary || itinerary.locationsSummary;
-        itinerary.days = data.itinerary.days || itinerary.days;
+        let hasChanges = false;
 
-        // 🚀 2. 覆蓋目前記憶體中的花費
-        expenses = Array.isArray(data.expenses) ? data.expenses : [];
-        nextExpenseId = expenses.length ? Math.max(...expenses.map(e => e.id || 0)) + 1 : 1;
-
-        // 🚀 3. 永久儲存「行程」與「花費」到 localStorage
-        try {
-          localStorage.setItem("hokkaido_itinerary_v1", JSON.stringify(itinerary));
-          localStorage.setItem("hokkaido_expenses", JSON.stringify(expenses));
-        } catch (err) {
-          console.warn("寫入 localStorage 失敗，但匯入已完成", err);
+        // 🚀 1. 覆蓋行程資料
+        if (data.itinerary) {
+          itinerary.tripTitle = data.itinerary.tripTitle || itinerary.tripTitle;
+          itinerary.tripPeriod = data.itinerary.tripPeriod || itinerary.tripPeriod;
+          itinerary.locationsSummary = data.itinerary.locationsSummary || itinerary.locationsSummary;
+          itinerary.days = data.itinerary.days || itinerary.days;
+          hasChanges = true;
         }
 
-        // 重新渲染
-        renderDayList();
-        renderDayDetail();
-        
-        alert(`✅ 匯入成功！已永久儲存\n行程：${itinerary.days.length} 天\n花費：${expenses.length} 筆\n\n下次開啟會自動載入此版本！`);
-        
+        // 🚀 2. 覆蓋花費資料
+        if (Array.isArray(data.expenses)) {
+          expenses = data.expenses;
+          nextExpenseId = expenses.length ? Math.max(...expenses.map(e => e.id || 0)) + 1 : 1;
+          hasChanges = true;
+        }
+
+        // 🚀 3. 永久儲存到 localStorage
+        if (hasChanges) {
+          try {
+            localStorage.setItem("hokkaido_itinerary_v1", JSON.stringify(itinerary));
+            localStorage.setItem("hokkaido_expenses", JSON.stringify(expenses));
+          } catch (err) {
+            console.warn("寫入 localStorage 失敗，但匯入已完成", err);
+          }
+
+          // 重新渲染
+          renderDayList();
+          renderDayDetail();
+
+          alert(`✅ 匯入成功！已永久儲存\n` +
+                `行程：${itinerary.days.length} 天\n` +
+                `花費：${expenses.length} 筆`);
+        } else {
+          alert("❌ 檔案無有效資料（缺少 itinerary 或 expenses）");
+        }
+
       } catch (err) {
-        console.error(err);
-        alert("❌ 匯入失敗：檔案格式錯誤或損壞");
+        console.error("JSON 解析錯誤：", err);
+        alert("❌ 匯入失敗：JSON 格式損壞\n\n請確認檔案是完整的「匯出行程」JSON");
       }
     };
-    
+
     reader.readAsText(file, "utf-8");
   });
-  
+
   input.click();
 }
-
 
 
 /// 匯出 CSV 檔（Excel 可直接開）
@@ -586,13 +714,15 @@ function renderDayList() {
     dayListEl.appendChild(card);
   });
 }
-// 🚀 新增：匯出按鈕事件監聽  
+
+// 🚀 新增：匯出按鈕事件監聯  
 if (exportBtn) {
   exportBtn.addEventListener("click", (e) => {
     e.preventDefault();
     exportItinerary();
   });
 }
+
 // 🚀 新增：匯入按鈕事件監聽
 const importBtn = document.getElementById("import-btn");
 if (importBtn) {
@@ -605,14 +735,14 @@ if (importBtn) {
 // 🚀 新增：重置為預設行程（帶確認對話框）
 function resetToDefault() {
   if (confirm("⚠️ 確定要重置為原始預設行程嗎？\n\n這會清除所有匯入的客製化行程與花費記錄！\n\n原始 Day 0-14 行程會重新載入。")) {
-    
+
     // 1. 清空 localStorage
     localStorage.removeItem("hokkaido_itinerary_v1");
     localStorage.removeItem("hokkaido_expenses");
-    
+
     // 2. 重新載入頁面（回到原始 app.js 裡的預設行程）
     location.reload();
-    
+
     console.log("✅ 已重置為預設行程");
   }
 }
@@ -631,24 +761,40 @@ function renderDayDetail() {
   const day = itinerary.days[selectedDayIndex];
   if (!day) return;
 
+  // 🚀 自動依時間排序（Anytime最後）
+  sortSectionsByTimeForDay(day);
+
+  // 🚀 修改：sectionsHtml 加入編輯/刪除按鈕 + data-section-index
   const sectionsHtml = day.sections
-    .map(
-      (s) => `
-      <div class="section-card">
-        <div class="section-topline">
-          <span class="section-time">${s.timeRange}</span>
-          <span class="section-type ${s.type}">${s.type}</span>
+    .map((s, idx) => {
+      // 向下相容：從舊資料的 title/notes 反推純文字和連結
+      const plainTitle = s.plainTitle || extractPlainText(s.title);
+      const linkUrl = s.linkUrl || extractFirstUrl(s.title) || extractFirstUrl(s.notes);
+      const plainNotes = s.plainNotes || extractPlainText(s.notes);
+
+      // 顯示用的 HTML（保持原本格式）
+      const displayTitle = s.title || buildHtmlTitle(plainTitle, linkUrl);
+      const displayNotes = s.notes || buildHtmlNotes(plainNotes);
+
+      return `
+        <div class="section-card" data-section-index="${idx}">
+          <div class="section-topline">
+            <span class="section-time">${formatTimeDisplay(s.timeRange) || "未設定"}</span>
+            <span class="section-type ${s.type || "sightseeing"}">
+  ${displayTypeLabel(s.type)}
+</span>
+
+          </div>
+          <div class="section-title">${displayTitle}</div>
+          <div class="section-description">${s.description || ""}</div>
+          ${displayNotes ? `<div class="section-notes">備註：${displayNotes}</div>` : ""}
+          <div class="section-actions">
+            <button type="button" class="btn-edit-section" title="編輯此行程">✏️ 編輯</button>
+            <button type="button" class="btn-delete-section" title="刪除此行程">🗑️ 刪除</button>
+          </div>
         </div>
-        <div class="section-title">${s.title}</div>
-        <div class="section-description">${s.description}</div>
-        ${
-          s.notes
-            ? `<div class="section-notes">備註：${s.notes}</div>`
-            : ""
-        }
-      </div>
-    `
-    )
+      `;
+    })
     .join("");
 
   const highlightsHtml = day.highlights
@@ -680,10 +826,59 @@ function renderDayDetail() {
 
   const globalRowsHtml = renderGlobalExpenseTable();
 
+ // 🚀 產生繁中下拉選單
+const typeOptionsHtml = ITINERARY_FIELDS.types
+  .map(t => `<option value="${t.value}">${t.label}</option>`)
+  .join("");
+
+
   dayDetailEl.innerHTML = `
     <div class="day-detail-header">
       <div class="day-detail-title">Day ${day.dayNumber} – ${day.city}</div>
       <div class="day-detail-meta">${day.date}（${day.weekday}）｜${day.summary}</div>
+    </div>
+
+    <!-- 🚀 新增：行程編輯表單 -->
+    <div class="section-editor-panel">
+      <h3 class="panel-title">✏️ 當日行程編輯 <span class="current-day-info">Day ${day.dayNumber} | ${day.date}</span></h3>
+      <form id="section-form" class="section-form">
+        <div class="section-form-row">
+          <label for="section-date">日期：</label>
+          <input type="date" id="section-date" value="${day.date}" required />
+        </div>
+       <div class="section-form-row">
+  <label for="section-timeRange">時間：</label>
+  <input type="text" id="section-timeRange" 
+         placeholder="2100" 
+         maxlength="4" 
+         inputmode="numeric"
+          required />
+  <small class="time-hint">輸入 2100 → 顯示 21:00</small>
+</div>
+
+        <div class="section-form-row">
+          <label for="section-type">行程類型：</label>
+          <select id="section-type">
+            ${typeOptionsHtml}
+          </select>
+        </div>
+        <div class="section-form-row full-width">
+          <label for="section-title">行程內容：</label>
+          <input type="text" id="section-title" placeholder="例如：大通公園雪祭主會場" maxlength="100" required />
+        </div>
+        <div class="section-form-row">
+          <label for="section-link">網頁連結：</label>
+          <input type="url" id="section-link" placeholder="https://www.snowfes.com/" />
+        </div>
+        <div class="section-form-row full-width">
+          <label for="section-notes">備註：</label>
+          <input type="text" id="section-notes" placeholder="例如：下雨改地下街，注意營業時間" maxlength="200" />
+        </div>
+        <div class="section-form-actions">
+          <button type="submit" class="section-save-btn">✅ 新增 / 更新行程</button>
+          <button type="button" id="section-cancel-edit" class="section-cancel-btn">❌ 取消編輯</button>
+        </div>
+      </form>
     </div>
 
     <div class="section-list">
@@ -782,6 +977,128 @@ function renderDayDetail() {
     </div>
   `;
 
+  // ==== 🚀 行程編輯表單事件處理（A. 新增） ====
+  const sectionForm = document.getElementById("section-form");
+  const sectionDateInput = document.getElementById("section-date");
+  const sectionTimeInput = document.getElementById("section-timeRange");
+  const sectionTypeInput = document.getElementById("section-type");
+  const sectionTitleInput = document.getElementById("section-title");
+  const sectionLinkInput = document.getElementById("section-link");
+  const sectionNotesInput = document.getElementById("section-notes");
+  const sectionCancelBtn = document.getElementById("section-cancel-edit");
+
+  // 表單送出：新增或更新 section
+  sectionForm.addEventListener("submit", (evt) => {
+    evt.preventDefault();
+
+    const rawTimeInput = sectionTimeInput.value.trim();
+    const timeRange = parseTimeInput(rawTimeInput);
+    const type = sectionTypeInput.value;
+    const plainTitle = sectionTitleInput.value.trim();
+    const linkUrl = sectionLinkInput.value.trim();
+    const plainNotes = sectionNotesInput.value.trim();
+
+    if (!rawTimeInput || !plainTitle || !/^\d{4}$/.test(rawTimeInput)) {
+  alert("❌ 時間格式錯誤！請輸入 4 位數字，如：2100（晚上9點）");
+  return;
+}
+
+
+    // 用工具函數產生 HTML 版本
+    const titleHtml = buildHtmlTitle(plainTitle, linkUrl);
+    const notesHtml = buildHtmlNotes(plainNotes);
+
+    const newSection = {
+      timeRange,
+      type,
+      plainTitle,           // 純文字（用於匯出）
+      title: titleHtml,     // HTML 版（用於顯示）
+      amount: 0,
+      currency: "JPY",
+      linkUrl: linkUrl || "",
+      plainNotes,           // 純文字（用於匯出）
+      notes: notesHtml,     // HTML 版（用於顯示）
+      description: plainTitle
+    };
+
+    const editIndexAttr = sectionForm.getAttribute("data-edit-index");
+    if (editIndexAttr !== null && editIndexAttr !== "") {
+      // 更新既有行程
+      const idx = Number(editIndexAttr);
+      if (day.sections[idx]) {
+        Object.assign(day.sections[idx], newSection);
+      }
+      sectionForm.removeAttribute("data-edit-index");
+    } else {
+      // 新增行程（插到當天最後）
+      day.sections.push(newSection);
+    }
+
+    // 清空表單
+    sectionTimeInput.value = "";
+    sectionTypeInput.value = "sightseeing";
+    sectionTitleInput.value = "";
+    sectionLinkInput.value = "";
+    sectionNotesInput.value = "";
+
+    renderDayDetail();
+  });
+
+  // 取消編輯按鈕
+  sectionCancelBtn.addEventListener("click", () => {
+    sectionForm.removeAttribute("data-edit-index");
+    sectionTimeInput.value = "";
+    sectionTypeInput.value = "sightseeing";
+    sectionTitleInput.value = "";
+    sectionLinkInput.value = "";
+    sectionNotesInput.value = "";
+  });
+
+  // ==== 行程卡片上的編輯/刪除按鈕（事件委派） ====
+  const sectionListEl = dayDetailEl.querySelector(".section-list");
+  if (sectionListEl) {
+    sectionListEl.addEventListener("click", (evt) => {
+      const target = evt.target;
+      if (!(target instanceof HTMLElement)) return;
+
+      const cardEl = target.closest(".section-card");
+      if (!cardEl) return;
+      const idx = Number(cardEl.getAttribute("data-section-index"));
+      if (Number.isNaN(idx)) return;
+
+      // 刪除行程
+      if (target.classList.contains("btn-delete-section")) {
+        if (!confirm("確定要刪除這個行程嗎？")) return;
+        day.sections.splice(idx, 1);
+        renderDayDetail();
+      }
+
+      // 編輯行程：把資料帶回表單
+      if (target.classList.contains("btn-edit-section")) {
+        const s = day.sections[idx];
+        if (!s) return;
+
+        // 反推純文字（向下相容舊資料）
+        const plainTitle = s.plainTitle || extractPlainText(s.title);
+        const linkUrl = s.linkUrl || extractFirstUrl(s.title) || "";
+        const plainNotes = s.plainNotes || extractPlainText(s.notes);
+
+        sectionDateInput.value = day.date;
+        sectionTimeInput.value = s.timeRange || "";
+        sectionTypeInput.value = s.type || "sightseeing";
+        sectionTitleInput.value = plainTitle;
+        sectionLinkInput.value = linkUrl;
+        sectionNotesInput.value = plainNotes;
+
+        sectionForm.setAttribute("data-edit-index", String(idx));
+
+        // 滾動到表單位置
+        sectionForm.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  }
+
+  // ==== 花費記帳表單（原有邏輯保持不變） ====
   const expenseForm = document.getElementById("expense-form");
 
   // 表單送出：新增或更新
@@ -836,9 +1153,8 @@ function renderDayDetail() {
   });
 
   // 刪除 / 編輯按鈕（事件委派）
- const expenseTableBody = document.getElementById("expense-table-body");
-if (expenseTableBody)
- {
+  const expenseTableBody = document.getElementById("expense-table-body");
+  if (expenseTableBody) {
     expenseTableBody.addEventListener("click", (evt) => {
       const target = evt.target;
       if (!(target instanceof HTMLElement)) return;
@@ -884,10 +1200,6 @@ if (expenseTableBody)
       }
     });
   }
-
-  // 匯出 / 匯入按鈕
-  if (btnExport) btnExport.addEventListener("click", exportExpenses);
-  if (btnImport) btnImport.addEventListener("click", importExpenses);
 }
 
 
@@ -895,12 +1207,11 @@ if (expenseTableBody)
 renderDayList();
 renderDayDetail();
 
-// 🚀 toolbox 花費按鈕事件（全域） - 新增這整個區塊
+// 🚀 toolbox 花費按鈕事件（全域）
 document.addEventListener('DOMContentLoaded', () => {
   const expensesExportBtn = document.getElementById('expenses-export-btn');
   const expensesImportBtn = document.getElementById('expenses-import-btn');
-  
+
   if (expensesExportBtn) expensesExportBtn.addEventListener('click', exportExpenses);
   if (expensesImportBtn) expensesImportBtn.addEventListener('click', importExpenses);
 });
-

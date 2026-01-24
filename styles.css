@@ -666,5 +666,12 @@ body::before {
   background: linear-gradient(135deg, #8e24aa, #ab47bc);
 }
 
+/* 🚀 新增：行程編輯表單樣式 */
+.section-editor-panel {
+  margin: 20px 0;
+  padding: 16
 
+/* 🚀 新增：時間輸入樣式（加在最後就好） */
+.time-hint { font-size: 11px; color: #666; margin-top: 2px; }
+input[pattern*="\d{4}"] { width: 120px; font-family: monospace; text-align: center; }
 
